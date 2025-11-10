@@ -1,0 +1,61 @@
+/* Navbar Styles */
+.navbar {
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%) !important;
+  border-bottom: 2px solid #4caf50;
+  padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  color: #2e7d32 !important;
+}
+
+.navbar-brand:hover {
+  color: #388e3c !important;
+}
+
+.navbar-marquee {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 1rem;
+}
+
+.navbar-marquee marquee {
+  font-size: 1rem;
+  color: #4caf50;
+  white-space: nowrap;
+}
+
+.btn-success {
+  background-color: #4caf50;
+  border-color: #4caf50;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #388e3c;
+  border-color: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-marquee {
+    display: none; /* Hide marquee on small screens */
+  }
+
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .btn-success {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}

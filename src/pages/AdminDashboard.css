@@ -1,0 +1,337 @@
+/* 🌍 Global */
+ 
+
+h1, h2, h3, h4, h5 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #0f3460; /* Professional dark blue */
+}
+
+/* ====== 📊 Dashboard Layout ====== */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ====== 🧭 Sidebar ====== */
+.sidebar {
+  width: 240px;
+  background: #0f3460; /* ✅ Changed from #1a1a2e to theme blue */
+  color: #fff;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1050;
+}
+
+.sidebar-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.profile-info {
+  font-size: 0.9rem;
+  margin: 3px 0;
+  opacity: 0.85;
+  text-align: center;
+}
+
+/* ====== Navigation Links ====== */
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 25px 0;
+  flex-grow: 1;
+}
+
+.nav-links li {
+  display: block;
+  padding: 10px 14px;
+  margin: 6px 0;
+  color: #ddd;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-links li:hover {
+  background: #162d5c;
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.nav-links .active {
+  background: #e94560; /* ✅ Red active */
+  color: #fff;
+  font-weight: 600;
+  transform: none;
+}
+
+/* ====== 🔴 Logout Button ====== */
+.logout-btn {
+  background: #e94560;
+  border: none;
+  padding: 12px;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #d62839;
+  transform: scale(1.05);
+}
+
+/* ====== 📱 Responsive Sidebar ====== */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.show {
+    transform: translateX(0);
+  }
+}
+
+/* ====== 🧾 Main Content ====== */
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+  background: #f8f9fa;
+  margin-left: 240px;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.main-content h2 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #0f3460;
+}
+
+.main-content h5 {
+  font-weight: 400;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+    margin-top: 60px; /* for optional topbar */
+  }
+}
+
+/* ====== 🔍 Section Header ====== */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.section-header input {
+  width: 280px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.section-header input:focus {
+  border-color: #0f3460;
+  outline: none;
+  box-shadow: 0 0 5px rgba(15, 52, 96, 0.3);
+}
+
+/* ====== 📋 Table Styling ====== */
+.table-container {
+  margin-top: 20px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.table-container th,
+.table-container td {
+  padding: 12px;
+  border-bottom: 1px solid #eaeaea;
+  text-align: center;
+  font-size: 0.92rem;
+}
+
+.table-container th {
+  background: #0f3460;
+  color: #fff;
+  font-weight: 600;
+}
+
+.table-container tr:hover td {
+  background: #f4f6fb;
+}
+
+/* ====== 🎨 Buttons ====== */
+.btn-warning,
+.btn-danger,
+.btn-success {
+  border: none;
+  padding: 7px 14px;
+  margin: 2px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-warning {
+  background: #f0ad4e;
+}
+.btn-warning:hover {
+  background: #ec971f;
+}
+
+.btn-danger {
+  background: #e94560;
+}
+.btn-danger:hover {
+  background: #c9302c;
+}
+
+.btn-success {
+  background: #5cb85c;
+}
+.btn-success:hover {
+  background: #449d44;
+}
+
+/* ====== 🧾 Edit Form ====== */
+.edit-form {
+  max-width: 650px;
+  margin: 20px auto;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1.5px solid #0f3460;
+  box-shadow: 0 2px 6px rgba(15, 52, 96, 0.15);
+}
+
+/* Labels */
+.edit-form label {
+  font-weight: 600;
+  font-size: 12px;
+  color: #0f3460;
+  margin-bottom: 3px;
+  display: block;
+}
+
+/* Inputs & Textareas */
+.edit-form .form-control {
+  font-size: 12px;
+  padding: 3px 8px;
+  height: 28px;
+  border: 1px solid #0f3460;
+  border-radius: 5px;
+  background: #f8faff;
+  color: #0f3460;
+}
+
+/* Textarea */
+.edit-form textarea.form-control {
+  min-height: 45px;
+  resize: vertical;
+  padding: 4px 8px;
+}
+
+/* Focus Effect */
+.edit-form .form-control:focus {
+  border-color: #0f3460;
+  box-shadow: 0 0 2px rgba(15, 52, 96, 0.3);
+  outline: none;
+}
+
+/* Image Preview */
+.edit-form img {
+  margin-top: 4px;
+  border-radius: 5px;
+  border: 1px solid #0f3460;
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+}
+
+/* Form Buttons */
+.btn-success {
+  background: #0f3460;
+  border: none;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.btn-success:hover {
+  background: #09213e;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #0f3460;
+  border: 1px solid #0f3460;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+.btn-secondary:hover {
+  background: #0f3460;
+  color: #fff;
+}
+
+/* ====== 📱 Responsive Adjustments ====== */
+@media (max-width: 576px) {
+  .section-header input {
+    width: 100%;
+  }
+
+  .table-container {
+    padding: 12px;
+  }
+
+  .table-container th,
+  .table-container td {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .edit-form {
+    padding: 12px;
+  }
+}
