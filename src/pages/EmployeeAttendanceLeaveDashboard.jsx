@@ -16,7 +16,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const API_URL =
   (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim()) ||
-  "http://localhost:5000/api/employee";
+  "https://steelblue-sheep-699352.hostingersite.com/api/employee";
 
 const EmployeeAttendanceDashboard = () => {
   const token = localStorage.getItem("token");

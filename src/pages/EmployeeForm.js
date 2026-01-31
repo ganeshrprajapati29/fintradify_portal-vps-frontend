@@ -13,7 +13,7 @@ const EmployeeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/messages", {
+      await axios.post("https://steelblue-sheep-699352.hostingersite.com/api/messages", {
         employeeName,
         message,
       });
@@ -30,7 +30,7 @@ const EmployeeForm = () => {
   const fetchMyMessages = async () => {
     try {
       if (employeeName) {
-        const res = await axios.get("http://localhost:5000/api/messages/all");
+        const res = await axios.get("https://steelblue-sheep-699352.hostingersite.com/api/messages/all");
         const allMsgs = res.data.data || [];
 
         const myMsgs = allMsgs.filter(

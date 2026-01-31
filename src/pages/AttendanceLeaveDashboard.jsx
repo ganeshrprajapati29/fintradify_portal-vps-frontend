@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 import { Bar } from "react-chartjs-2";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -18,10 +18,9 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const API_URL =
   (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim()) ||
-  "http://localhost:5000/api/employee";
+  "/api/employee";
 
 const AttendanceLeaveDashboard = () => {
-  const token = localStorage.getItem("token");
   const [attendance, setAttendance] = useState([]);
   const [selectedRange, setSelectedRange] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -34,9 +33,7 @@ const AttendanceLeaveDashboard = () => {
   // ✅ Fetch Attendance Data
   const fetchAttendance = async () => {
     try {
-      const res = await axios.get(`${API_URL}/attendance`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axiosInstance.get(`${API_URL}/attendance`);
       setAttendance(res.data.attendance || []);
     } catch (err) {
       console.error("❌ Attendance fetch error:", err.response?.data || err.message);

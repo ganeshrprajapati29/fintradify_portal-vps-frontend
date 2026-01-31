@@ -19,7 +19,7 @@ const AdminMessages = () => {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/messages/admin/${adminId}`
+        `https://steelblue-sheep-699352.hostingersite.com/api/messages/admin/${adminId}`
       );
       console.log("✅ Messages fetched (raw):", res.data);
 
@@ -38,7 +38,7 @@ const AdminMessages = () => {
 
   const updateStatus = async (messageId, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/messages/status/${messageId}`, {
+      await axios.put(`https://steelblue-sheep-699352.hostingersite.com/api/messages/status/${messageId}`, {
         status: newStatus,
         adminId,
       });
@@ -52,7 +52,7 @@ const AdminMessages = () => {
   const deleteMessage = async (messageId) => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/messages/${messageId}`, {
+      await axios.delete(`https://steelblue-sheep-699352.hostingersite.com/api/messages/${messageId}`, {
         data: { adminId }, // ✅ ensure only correct admin can delete
       });
       fetchMessages();

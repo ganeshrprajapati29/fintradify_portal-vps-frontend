@@ -27,7 +27,7 @@ const EmployeeDashboard = () => {
   const adminId = localStorage.getItem("adminId");
   const API_URL =
     (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim()) ||
-    "http://localhost:5000";
+    "https://steelblue-sheep-699352.hostingersite.com";
 
   const [allowed, setAllowed] = useState(null);
   const [attendance, setAttendance] = useState([]);

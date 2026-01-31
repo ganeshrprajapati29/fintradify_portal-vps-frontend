@@ -17,7 +17,7 @@ export default function SalarySlipPage() {
 
   const token = localStorage.getItem("token");
   const API_URL =
-    process.env.REACT_APP_API_URL?.trim() || "http://localhost:5000";
+    process.env.REACT_APP_API_URL?.trim() || "https://steelblue-sheep-699352.hostingersite.com";
 
   // 🔍 Search employees
   const handleSearch = async () => {

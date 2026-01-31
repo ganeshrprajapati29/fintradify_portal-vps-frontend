@@ -11,7 +11,7 @@ const EmployeeAttendance = () => {
 
   const API_URL =
     (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim()) ||
-    "http://localhost:5000";
+    "https://steelblue-sheep-699352.hostingersite.com";
 
   const [attendance, setAttendance] = useState([]);
   const [loading, setLoading] = useState(false);
