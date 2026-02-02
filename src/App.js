@@ -16,14 +16,12 @@ function App() {
 
 function AppWithNavbar() {
   const location = useLocation();
-  const showNavbar = location.pathname !== '/login';
-  const showFooter = location.pathname !== '/login';
 
   return (
     <>
-      {showNavbar && <Navbar />}
+      <Navbar />
       <AppContent />
-      {showFooter && <Footer />}
+      <Footer />
     </>
   );
 }

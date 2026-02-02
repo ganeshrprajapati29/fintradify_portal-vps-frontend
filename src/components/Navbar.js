@@ -1,12 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { FaSignInAlt, FaBars, FaTimes, FaUserShield, FaUsers, FaCog, FaSignOutAlt, FaUserFriends, FaTasks, FaCalendarAlt, FaEnvelope, FaChartBar, FaHome, FaBriefcase, FaInfoCircle, FaPhone, FaShieldAlt } from 'react-icons/fa';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { FaSignInAlt, FaBars, FaTimes, FaUserShield, FaUsers, FaCog, FaSignOutAlt, FaUserFriends, FaTasks, FaCalendarAlt, FaEnvelope, FaChartBar, FaHome, FaBriefcase, FaInfoCircle, FaPhone, FaShieldAlt, FaEye, FaEyeSlash, FaLock, FaEnvelope as FaEnvelopeIcon, FaKey, FaChevronRight, FaGlobe, FaMobileAlt, FaCloud, FaDatabase, FaChartBar as FaChartBarIcon, FaUsers as FaUsersIcon, FaBell, FaCalendarAlt as FaCalendarAltIcon, FaFileInvoiceDollar, FaCogs, FaHandshake, FaAward, FaHeart, FaGoogle, FaMicrosoft, FaApple, FaGithub, FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram, FaAmazon, FaUser, FaUserTie, FaUserCog as FaUserCogIcon, FaCheckCircle, FaClock, FaChartLine, FaShieldAlt as FaShieldAltIcon, FaStar, FaQuoteLeft, FaRocket, FaArrowRight } from 'react-icons/fa';
+import axios from 'axios';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState(null);
   const [username, setUsername] = useState('');
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const loginModalRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -20,7 +28,7 @@ const Navbar = () => {
   }, []);
 
   const handleLoginClick = () => {
-    navigate('/login');
+    setIsLoginModalOpen(true);
   };
 
   const handleLogout = () => {
@@ -59,6 +67,53 @@ const Navbar = () => {
   ];
 
   const filteredMenuItems = menuItems.filter(item => !item.roles || item.roles.includes(userRole));
+
+  // Close modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (loginModalRef.current && !loginModalRef.current.contains(event.target)) {
+        setIsLoginModalOpen(false);
+      }
+    };
+
+    if (isLoginModalOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isLoginModalOpen]);
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/auth/login', loginData);
+      const { token, user } = response.data;
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('username', user.username);
+      localStorage.setItem('role', user.role);
+
+      setUserRole(user.role);
+      setUsername(user.username);
+      setIsLoginModalOpen(false);
+      setLoginData({ email: '', password: '' });
+
+      // Navigate to appropriate dashboard
+      const defaultPath = user.role === 'superadmin' ? '/superadmin' : user.role === 'admin' ? '/admin' : '/employee';
+      localStorage.setItem("savedPath", defaultPath);
+      navigate(defaultPath);
+
+    } catch (error) {
+      setError(error.response?.data?.message || 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -150,6 +205,10 @@ const Navbar = () => {
           border: 1px solid rgba(2, 132, 199, 0.2);
         }
 
+        .menu-toggle {
+          display: none;
+        }
+
         .btn-custom {
           background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
           border: none;
@@ -180,7 +239,6 @@ const Navbar = () => {
         }
 
         .menu-toggle {
-          display: none;
           background: transparent;
           border: none;
           color: #0284c7;
@@ -193,6 +251,36 @@ const Navbar = () => {
 
         .menu-toggle:hover {
           background: rgba(2, 132, 199, 0.1);
+        }
+
+        .desktop-nav {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          margin-left: 20px;
+        }
+
+        .desktop-nav-link {
+          color: #0284c7;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 0.9rem;
+          padding: 8px 16px;
+          border-radius: 20px;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .desktop-nav-link:hover {
+          background: rgba(2, 132, 199, 0.1);
+          color: #0369a1;
+          transform: translateY(-1px);
+        }
+
+        .desktop-nav-link svg {
+          font-size: 1rem;
         }
 
         .mobile-menu {
@@ -209,7 +297,9 @@ const Navbar = () => {
           opacity: 0;
           visibility: hidden;
           transition: all 0.3s ease;
-          z-index: 1049;
+          z-index: 99999;
+          max-height: calc(100vh - 70px);
+          overflow-y: auto;
         }
 
         .mobile-menu.open {
@@ -279,6 +369,10 @@ const Navbar = () => {
             padding: 8px 16px;
             font-size: 0.8rem;
           }
+
+          .desktop-nav {
+            display: none;
+          }
         }
 
         @media (max-width: 576px) {
@@ -339,31 +433,42 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Marquee in the center */}
-          <div className="navbar-marquee">
-            <marquee behavior="scroll" direction="left">
-              Welcome to Fintradify HR Portal - Simplifying Workforce Management
-            </marquee>
+          {/* Desktop Navigation Links */}
+          <div className="desktop-nav">
+            {publicNavItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="desktop-nav-link"
+                >
+                  <IconComponent />
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Actions on the right */}
           <div className="navbar-actions">
             {userRole && username && (
               <div className="user-info">
-                <span>👤 {username}</span>
+                <span>{username}</span>
               </div>
             )}
 
+            {/* Always show menu toggle for navigation */}
+            <button className="menu-toggle" onClick={toggleMenu}>
+              {isMenuOpen ? <FaTimes /> : <FaBars />}
+            </button>
+
+            {/* Show login/logout button */}
             {userRole ? (
-              <>
-                <button className="menu-toggle" onClick={toggleMenu}>
-                  {isMenuOpen ? <FaTimes /> : <FaBars />}
-                </button>
-                <button className="btn-custom btn-logout" onClick={handleLogout}>
-                  <FaSignOutAlt />
-                  Logout
-                </button>
-              </>
+              <button className="btn-custom btn-logout" onClick={handleLogout}>
+                <FaSignOutAlt />
+                Logout
+              </button>
             ) : (
               <button className="btn-custom" onClick={handleLoginClick}>
                 <FaSignInAlt />
@@ -373,29 +478,327 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {userRole && (
-          <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
-            <ul className="mobile-menu-list">
-              {filteredMenuItems.map((item) => {
-                const IconComponent = item.icon;
-                return (
-                  <li key={item.key} className="mobile-menu-item">
-                    <Link
-                      className="mobile-menu-link"
-                      to={item.path}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <IconComponent />
-                      {item.label}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
+        {/* Mobile Menu - Always show all options */}
+        <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
+          <ul className="mobile-menu-list">
+            {/* Public Navigation Items */}
+            {publicNavItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <li key={item.label} className="mobile-menu-item">
+                  <Link
+                    className="mobile-menu-link"
+                    to={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <IconComponent />
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+
+            {/* Separator */}
+            {userRole && <li style={{ borderBottom: '2px solid rgba(2, 132, 199, 0.2)', margin: '10px 0' }}></li>}
+
+            {/* User-specific menu items */}
+            {userRole && filteredMenuItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <li key={item.key} className="mobile-menu-item">
+                  <Link
+                    className="mobile-menu-link"
+                    to={item.path}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <IconComponent />
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </nav>
+
+      {/* Login Modal */}
+      {isLoginModalOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1050,
+          backdropFilter: 'blur(5px)'
+        }}>
+          <div
+            ref={loginModalRef}
+            style={{
+              background: '#fff',
+              borderRadius: '16px',
+              padding: '2rem',
+              width: '100%',
+              maxWidth: '400px',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+              position: 'relative',
+              animation: 'modalSlideIn 0.3s ease-out'
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsLoginModalOpen(false)}
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                background: 'transparent',
+                border: 'none',
+                fontSize: '1.5rem',
+                cursor: 'pointer',
+                color: '#6b7280',
+                padding: '0.5rem',
+                borderRadius: '50%',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f3f4f6';
+                e.currentTarget.style.color = '#374151';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = '#6b7280';
+              }}
+            >
+              ×
+            </button>
+
+            {/* Header */}
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+              <div style={{
+                width: '60px',
+                height: '60px',
+                background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                borderRadius: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem'
+              }}>
+                <FaLock style={{ color: '#fff', fontSize: '1.5rem' }} />
+              </div>
+              <h2 style={{
+                fontSize: '1.75rem',
+                fontWeight: 700,
+                color: '#111827',
+                marginBottom: '0.5rem'
+              }}>
+                Welcome Back
+              </h2>
+              <p style={{
+                color: '#6b7280',
+                fontSize: '0.875rem'
+              }}>
+                Sign in to your Fintradify account
+              </p>
+            </div>
+
+            {/* Login Form */}
+            <form onSubmit={handleLoginSubmit}>
+              {/* Email Field */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  color: '#374151',
+                  marginBottom: '0.5rem'
+                }}>
+                  Email Address
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <FaEnvelopeIcon style={{
+                    position: 'absolute',
+                    left: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#9ca3af',
+                    fontSize: '1rem'
+                  }} />
+                  <input
+                    type="email"
+                    value={loginData.email}
+                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                    placeholder="Enter your email"
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 0.75rem 0.75rem 2.5rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      transition: 'all 0.2s ease',
+                      outline: 'none'
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = '#4f46e5';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(79, 70, 229, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = '#d1d5db';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Password Field */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <label style={{
+                  display: 'block',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  color: '#374151',
+                  marginBottom: '0.5rem'
+                }}>
+                  Password
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <FaKey style={{
+                    position: 'absolute',
+                    left: '0.75rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#9ca3af',
+                    fontSize: '1rem'
+                  }} />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={loginData.password}
+                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                    placeholder="Enter your password"
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 2.5rem 0.75rem 2.5rem',
+                      border: '1px solid #d1d5db',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      transition: 'all 0.2s ease',
+                      outline: 'none'
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = '#4f46e5';
+                      e.currentTarget.style.boxShadow = '0 0 0 3px rgba(79, 70, 229, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = '#d1d5db';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '0.75rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#9ca3af',
+                      padding: '0.25rem'
+                    }}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Error Message */}
+              {error && (
+                <div style={{
+                  background: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  color: '#dc2626',
+                  padding: '0.75rem',
+                  borderRadius: '6px',
+                  fontSize: '0.875rem',
+                  marginBottom: '1.5rem'
+                }}>
+                  {error}
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isLoading}
+                style={{
+                  width: '100%',
+                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '0.875rem',
+                  borderRadius: '8px',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s ease',
+                  opacity: isLoading ? 0.7 : 1
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(79, 70, 229, 0.4)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }
+                }}
+              >
+                {isLoading ? 'Signing In...' : 'Sign In'}
+              </button>
+            </form>
+
+            {/* Footer */}
+            <div style={{
+              textAlign: 'center',
+              marginTop: '1.5rem',
+              paddingTop: '1.5rem',
+              borderTop: '1px solid #e5e7eb'
+            }}>
+              <p style={{
+                fontSize: '0.875rem',
+                color: '#6b7280'
+              }}>
+                Need help? Contact our support team
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes modalSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </>
   );
 };
