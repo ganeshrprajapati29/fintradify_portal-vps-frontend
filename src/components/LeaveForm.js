@@ -11,7 +11,7 @@ const LeaveForm = () => {
   const [leaves, setLeaves] = useState([]); // ✅ always array
 
   const token = localStorage.getItem('token');
-  const API_URL = process.env.REACT_APP_API_URL || "https://steelblue-sheep-699352.hostingersite.com";
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // ✅ Fetch leaves (history)
   const fetchLeaves = async () => {

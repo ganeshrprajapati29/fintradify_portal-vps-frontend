@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://steelblue-sheep-699352.hostingersite.com/',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
 });
 
 // Request interceptor to add token

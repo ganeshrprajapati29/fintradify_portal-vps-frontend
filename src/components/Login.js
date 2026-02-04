@@ -116,7 +116,7 @@ const Login = ({ setRole }) => {
   const loginModalRef = useRef(null);
   const testimonialIntervalRef = useRef(null);
 
-  const API_URL = process.env.REACT_APP_API_URL?.trim() || "https://steelblue-sheep-699352.hostingersite.com";
+  const API_URL = process.env.REACT_APP_API_URL;
 
   // Close menu when clicking outside
   useEffect(() => {
