@@ -68,9 +68,11 @@ const FeaturesPage = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="py-5 bg-primary text-white">
+      <section className="hero-features py-5 text-white">
         <div className="container text-center">
-          <h1 className="display-4 fw-bold mb-4">Powerful Features for Modern HR</h1>
+          <h1 className="display-4 fw-bold mb-4">
+            Powerful Features for Modern HR
+          </h1>
           <p className="lead mb-0">
             Discover all the tools you need to manage your workforce effectively
           </p>
@@ -127,6 +129,21 @@ const FeaturesPage = () => {
       </section>
 
       <style jsx>{`
+
+      .hero-features {
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.55),
+      rgba(0, 0, 0, 0.55)
+    ),
+    url("https://www.cjr.org/wp-content/uploads/2016/12/tow-design-hero.jpg")
+      no-repeat center center;
+
+  background-size: cover;
+}
         .card {
           transition: 0.3s;
           border-radius: 16px;

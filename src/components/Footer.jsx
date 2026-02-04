@@ -31,7 +31,7 @@ const Footer = () => {
     { name: "Solutions", path: "/solutions" },
     { name: "About Us", path: "/about" },
     { name: "Contact", path: "/contact" },
-    { name: "Privacy Policy", path: "/privacy" },
+    { name: "Privacy Policy", path: "/privacy-policy" },
   ];
 
   return (
