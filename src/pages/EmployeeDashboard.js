@@ -41,72 +41,100 @@ const EmployeeDashboard = () => {
   };
 
   // ✅ Check access
-  useEffect(() => {
-    const checkEmployeeAccess = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/api/employee/verify-access`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  // 🔐 CHECK EMPLOYEE ACCESS
+useEffect(() => {
+  const checkEmployeeAccess = async () => {
+    try {
+      if (!token) {
+        setAllowed(false);
+        return;
+      }
 
-        if (
-          (res.data?.allowed || res.data?.success) &&
-          res.data?.role === "employee"
-        ) {
-          setAllowed(res.data.adminId === adminId);
-        } else {
-          setAllowed(false);
+      const res = await axios.get(
+        `${API_URL}/api/employee/verify-access`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
-      } catch (err) {
-        console.error("❌ Employee access check error:", err);
+      );
+
+      if (
+        (res.data?.allowed === true || res.data?.success === true) &&
+        res.data?.role === "employee"
+      ) {
+        // ❌ adminId comparison hata diya (false unauthorized ka main reason)
+        setAllowed(true);
+      } else {
         setAllowed(false);
       }
-    };
-
-    if (role === "employee") checkEmployeeAccess();
-    else setAllowed(false);
-  }, [role, API_URL, token, adminId]);
-
-  // ✅ Fetch Attendance
-  useEffect(() => {
-    const fetchAttendance = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/api/employee/attendance`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setAttendance(res.data?.attendance || []);
-      } catch (err) {
-        console.error("❌ Fetch attendance error:", err);
-      }
-    };
-
-    if (allowed) fetchAttendance();
-  }, [allowed, API_URL, token]);
-
-  if (allowed === null)
-    return (
-      <div className="container mt-5 text-center">Checking access...</div>
-    );
-
-  if (!allowed)
-    return (
-      <div className="container mt-5 text-center">
-        <h3 className="text-danger">Unauthorized Access</h3>
-        <p>You are not allowed to view this page.</p>
-      </div>
-    );
-
-  const renderLocation = (loc) => {
-    if (!loc?.latitude || !loc?.longitude) return "—";
-    return (
-      <a
-        href={`https://www.google.com/maps?q=${loc.latitude},${loc.longitude}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {loc.latitude.toFixed(4)}, {loc.longitude.toFixed(4)}
-      </a>
-    );
+    } catch (err) {
+      console.error("❌ Employee access check error:", err);
+      setAllowed(false);
+    }
   };
+
+  if (role === "employee") {
+    checkEmployeeAccess();
+  } else {
+    setAllowed(false);
+  }
+}, [role, API_URL, token]);
+
+// 📊 FETCH ATTENDANCE
+useEffect(() => {
+  const fetchAttendance = async () => {
+    try {
+      const res = await axios.get(
+        `${API_URL}/api/employee/attendance`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setAttendance(res.data?.attendance || []);
+    } catch (err) {
+      console.error("❌ Fetch attendance error:", err);
+      setAllowed(false); // 🔥 token invalid / expired
+    }
+  };
+
+  // 🔥 IMPORTANT FIX
+  if (allowed === true && token) {
+    fetchAttendance();
+  }
+}, [allowed, API_URL, token]);
+
+// ⏳ LOADING
+if (allowed === null) {
+  return (
+    <div className="container mt-5 text-center">
+      Checking access...
+    </div>
+  );
+}
+
+// ❌ UNAUTHORIZED
+if (allowed === false) {
+  return (
+    <div className="container mt-5 text-center">
+      <h3 className="text-danger">Unauthorized Access</h3>
+      <p>You are not allowed to view this page.</p>
+    </div>
+  );
+}
+
+// 📍 LOCATION RENDER (no change)
+const renderLocation = (loc) => {
+  if (!loc?.latitude || !loc?.longitude) return "—";
+  return (
+    <a
+      href={`https://www.google.com/maps?q=${loc.latitude},${loc.longitude}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {loc.latitude.toFixed(4)}, {loc.longitude.toFixed(4)}
+    </a>
+  );
+};
+
 
   return (
     <div className="employee-dashboard">

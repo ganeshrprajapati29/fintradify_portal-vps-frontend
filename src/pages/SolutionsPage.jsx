@@ -265,7 +265,7 @@ const SolutionsPage = () => {
 }
          
 
-
+  
         .solution-card { 
           border-radius: 18px;
           transition: 0.3s;

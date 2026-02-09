@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Navbar from './Navbar';
+import Footer from './Footer';
 // import  from "react-icons/fa";
 import {
   FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram,FaAmazon,
@@ -426,6 +428,8 @@ const Login = ({ setRole }) => {
   `;
 
   return (
+    <>
+    <Navbar/>
     <div style={{
       minHeight: '100vh',
       background: '#ffffff',
@@ -2077,6 +2081,8 @@ const Login = ({ setRole }) => {
 
 
     </div>
+    <Footer/>
+    </>
   );
 };
 
