@@ -1,35 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import "./EmployeeProfile.css";
 
+const API_URL =
+  (process.env.REACT_APP_API_URL &&
+    process.env.REACT_APP_API_URL.trim()) ||
+  "https://steelblue-sheep-699352.hostingersite.com";
+
 const EmployeeProfile = () => {
   const token = localStorage.getItem("token");
-  const API_URL =
-    (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim()) ||
-    "https://steelblue-sheep-699352.hostingersite.com";
 
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 🔒 StrictMode duplicate call prevention
+  const fetchedRef = useRef(false);
 
   useEffect(() => {
+    if (fetchedRef.current) return;
+    fetchedRef.current = true;
+
     const fetchProfile = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`${API_URL}/api/employee/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(res.data.user);
       } catch (err) {
-        console.error("❌ Fetch profile error:", err.response?.data || err.message);
+        console.error(
+          "❌ Fetch profile error:",
+          err.response?.data || err.message
+        );
+      } finally {
+        setLoading(false);
       }
     };
-    fetchProfile();
-  }, [API_URL, token]);
 
-  if (!profile)
-    return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: "60vh" }}>
-        <div className="spinner-border text-primary" role="status"></div>
-      </div>
-    );
+    fetchProfile();
+  }, [token]);
 
   // ✅ Safe image URL builder
   const getImageUrl = (imgPath) => {
@@ -39,6 +48,19 @@ const EmployeeProfile = () => {
     return `${base}${cleanPath}`;
   };
 
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "60vh" }}
+      >
+        <div className="spinner-border text-primary" role="status" />
+      </div>
+    );
+  }
+
+  if (!profile) return null;
+
   const safeName = profile.name || "Employee";
 
   return (
@@ -47,25 +69,28 @@ const EmployeeProfile = () => {
         {/* Banner */}
         <div className="profile-banner text-white p-4">
           <h2 className="fw-bold mb-0">Employee Profile</h2>
-          <p className="mb-0 text-white-50">Personal & Professional Details</p>
+          <p className="mb-0 text-white-50">
+            Personal & Professional Details
+          </p>
         </div>
 
-        {/* Main Row */}
+        {/* Main */}
         <div className="card-body p-4">
           <div className="row g-4 align-items-center">
-            {/* Left Column: Profile Image */}
+            {/* Left */}
             <div className="col-md-4 text-center">
               {profile.image ? (
                 <img
                   src={getImageUrl(profile.image)}
                   alt={`${safeName}'s Profile`}
                   className="rounded-circle profile-img shadow"
+                  loading="lazy"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = "/default-avatar.png";
                   }}
                 />
-              ) : (
+              ) : (   
                 <div className="avatar-placeholder shadow">
                   {safeName.charAt(0).toUpperCase()}
                 </div>
@@ -75,12 +100,14 @@ const EmployeeProfile = () => {
               <span className="badge bg-success px-3 py-2">Active</span>
             </div>
 
-            {/* Right Column: Profile Info */}
+            {/* Right */}
             <div className="col-md-8">
               <div className="row g-3">
                 <div className="col-sm-6">
                   <small className="text-muted">Employee ID</small>
-                  <h6 className="fw-semibold">{profile.employeeId || "—"}</h6>
+                  <h6 className="fw-semibold">
+                    {profile.employeeId || "—"}
+                  </h6>
                 </div>
                 <div className="col-sm-6">
                   <small className="text-muted">Email</small>
@@ -88,30 +115,37 @@ const EmployeeProfile = () => {
                 </div>
                 <div className="col-sm-6">
                   <small className="text-muted">Department</small>
-                  <h6 className="fw-semibold">{profile.department || "—"}</h6>
+                  <h6 className="fw-semibold">
+                    {profile.department || "—"}
+                  </h6>
                 </div>
                 <div className="col-sm-6">
                   <small className="text-muted">Salary</small>
-                  <h6 className="fw-semibold">₹{profile.salary || "—"}</h6>
+                  <h6 className="fw-semibold">
+                    ₹{profile.salary || "—"}
+                  </h6>
                 </div>
                 <div className="col-sm-6">
                   <small className="text-muted">Join Date</small>
                   <h6 className="fw-semibold">
-                    {profile.joinDate ? new Date(profile.joinDate).toLocaleDateString() : "—"}
+                    {profile.joinDate
+                      ? new Date(profile.joinDate).toLocaleDateString()
+                      : "—"}
                   </h6>
                 </div>
                 <div className="col-sm-6">
                   <small className="text-muted">Role</small>
-                  <h6 className="fw-semibold text-capitalize">{profile.role || "—"}</h6>
+                  <h6 className="fw-semibold text-capitalize">
+                    {profile.role || "—"}
+                  </h6> 
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
         <div className="card-footer bg-light text-center py-2">
-          <small className="text-muted">Last updated just now</small>
+          <small className="text-muted">Profile loaded successfully</small>
         </div>
       </div>
     </div>
