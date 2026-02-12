@@ -44,9 +44,7 @@ const EmployeeDashboard = () => {
   const role = localStorage.getItem("role");
   const token = localStorage.getItem("token");
   const adminId = localStorage.getItem("adminId");
-  const API_URL =
-    (process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim()) ||
-    "https://steelblue-sheep-699352.hostingersite.com";
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const [allowed, setAllowed] = useState(null);
   const [attendance, setAttendance] = useState([]);
