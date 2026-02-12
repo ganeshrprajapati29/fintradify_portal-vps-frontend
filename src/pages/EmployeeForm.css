@@ -1,62 +1,676 @@
+/* ========================================
+   🎨 EMPLOYEE FORM & COMPONENTS CSS
+   Professional & Modern Design
+======================================== */
+
+/* ===== 📝 Employee Form ===== */
+.employee-form {
+  font-family: "Inter", "Poppins", sans-serif;
+}
+
 .employee-form h2 {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  color: #0f3460;
+  font-family: "Inter", "Poppins", sans-serif;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 24px;
+  font-size: 1.75rem;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
+.employee-form h3 {
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+}
+
+.employee-form h4 {
+  font-weight: 600;
+  color: var(--dark-light);
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+/* ===== 💠 Card Overrides ===== */
+.employee-form .card,
 .card {
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
+  border: 1px solid #e2e8f0;
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-card);
+  margin-bottom: 24px;
+  transition: var(--transition);
+}
+
+.employee-form .card:hover,
+.card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: #cbd5e1;
+}
+
+.employee-form .card-header,
+.card-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  padding: 18px 24px;
   border: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Input & Textarea */
-.form-control {
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  transition: 0.3s;
+.employee-form .card-body,
+.card-body {
+  padding: 24px;
 }
 
-.form-control:focus {
-  border-color: #0f3460;
-  box-shadow: 0 0 5px rgba(15, 52, 96, 0.3);
+.employee-form .card-title,
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* Button */
+.employee-form .card-subtitle,
+.card-subtitle {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 16px;
+}
+
+/* ===== 📝 Form Controls ===== */
+.employee-form .form-label,
+.form-label {
+  font-weight: 600;
+  color: var(--dark-light);
+  margin-bottom: 8px;
+  font-size: 0.92rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.employee-form .form-label.required::after,
+.form-label.required::after {
+  content: "*";
+  color: var(--danger);
+  margin-left: 4px;
+}
+
+.employee-form .form-control,
+.form-control,
+.employee-form .form-select,
+.form-select {
+  border-radius: var(--radius-md);
+  border: 2px solid #e2e8f0;
+  padding: 11px 16px;
+  font-size: 0.92rem;
+  transition: var(--transition);
+  background: #fff;
+  color: var(--dark);
+  font-family: inherit;
+}
+
+.employee-form .form-control:focus,
+.form-control:focus,
+.employee-form .form-select:focus,
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  outline: none;
+  background: #fff;
+}
+
+.employee-form .form-control:disabled,
+.form-control:disabled,
+.employee-form .form-select:disabled,
+.form-select:disabled {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: var(--gray);
+  cursor: not-allowed;
+}
+
+.employee-form .form-control::placeholder,
+.form-control::placeholder {
+  color: var(--gray-light);
+  opacity: 0.7;
+}
+
+/* Textarea Specific */
+.employee-form textarea.form-control,
+textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+/* ===== 🎯 Buttons ===== */
+.employee-form .btn,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  font-family: inherit;
+}
+
+.employee-form .btn i,
+.btn i {
+  font-size: 1.05rem;
+}
+
+/* Primary Button */
+.employee-form .btn-primary,
 .btn-primary {
-  background: #0f3460;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
   border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  padding: 10px 20px;
-  transition: all 0.3s;
 }
 
+.employee-form .btn-primary:hover,
 .btn-primary:hover {
-  background: #162d5c;
+  background: linear-gradient(135deg, var(--primary-dark) 0%, #1e3a8a 100%);
   transform: translateY(-2px);
-}
-
-/* Status Badges */
-.status-badge {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
   color: #fff;
 }
 
-.status-badge.pending {
-  background: #f0ad4e;
+.employee-form .btn-primary:active,
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
 }
 
-.status-badge.in-progress {
-  background: #0275d8;
+.employee-form .btn-primary:disabled,
+.btn-primary:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-.status-badge.resolved {
-  background: #5cb85c;
+/* Success Button */
+.employee-form .btn-success,
+.btn-success {
+  background: linear-gradient(135deg, var(--secondary) 0%, #059669 100%);
+  color: #fff;
+  border: none;
 }
 
-.status-badge.rejected {
-  background: #d9534f;
+.employee-form .btn-success:hover,
+.btn-success:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+  color: #fff;
+}
+
+/* Danger Button */
+.employee-form .btn-danger,
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+  color: #fff;
+  border: none;
+}
+
+.employee-form .btn-danger:hover,
+.btn-danger:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+  color: #fff;
+}
+
+/* Warning Button */
+.employee-form .btn-warning,
+.btn-warning {
+  background: linear-gradient(135deg, var(--accent) 0%, #d97706 100%);
+  color: #fff;
+  border: none;
+}
+
+.employee-form .btn-warning:hover,
+.btn-warning:hover {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+  color: #fff;
+}
+
+/* Secondary Button */
+.employee-form .btn-secondary,
+.btn-secondary {
+  background: var(--dark-light);
+  color: #fff;
+  border: none;
+}
+
+.employee-form .btn-secondary:hover,
+.btn-secondary:hover {
+  background: var(--dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 41, 59, 0.3);
+  color: #fff;
+}
+
+/* Outline Buttons */
+.employee-form .btn-outline-primary,
+.btn-outline-primary {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  box-shadow: none;
+}
+
+.employee-form .btn-outline-primary:hover,
+.btn-outline-primary:hover {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.employee-form .btn-outline-secondary,
+.btn-outline-secondary {
+  background: transparent;
+  border: 2px solid var(--dark-light);
+  color: var(--dark-light);
+  box-shadow: none;
+}
+
+.employee-form .btn-outline-secondary:hover,
+.btn-outline-secondary:hover {
+  background: var(--dark-light);
+  color: #fff;
+  border-color: var(--dark-light);
+}
+
+/* Button Sizes */
+.employee-form .btn-sm,
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.employee-form .btn-lg,
+.btn-lg {
+  padding: 14px 32px;
+  font-size: 1rem;
+}
+
+/* ===== 🏷️ Status Badges ===== */
+.employee-form .status-badge,
+.status-badge,
+.employee-form .badge,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.employee-form .status-badge i,
+.status-badge i,
+.employee-form .badge i,
+.badge i {
+  font-size: 0.9rem;
+}
+
+/* Pending Status */
+.employee-form .status-badge.pending,
+.status-badge.pending,
+.employee-form .badge-warning,
+.badge-warning {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+/* In Progress Status */
+.employee-form .status-badge.in-progress,
+.status-badge.in-progress,
+.employee-form .badge-info,
+.badge-info {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+/* Resolved/Success Status */
+.employee-form .status-badge.resolved,
+.status-badge.resolved,
+.employee-form .badge-success,
+.badge-success {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* Rejected/Danger Status */
+.employee-form .status-badge.rejected,
+.status-badge.rejected,
+.employee-form .badge-danger,
+.badge-danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Approved Status */
+.employee-form .status-badge.approved,
+.status-badge.approved {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* Active Status */
+.employee-form .status-badge.active,
+.status-badge.active {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+/* Completed Status */
+.employee-form .status-badge.completed,
+.status-badge.completed {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* Secondary Badge */
+.employee-form .badge-secondary,
+.badge-secondary {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+/* Primary Badge */
+.employee-form .badge-primary,
+.badge-primary {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+/* ===== 📊 Form Groups ===== */
+.employee-form .form-group,
+.form-group {
+  margin-bottom: 20px;
+}
+
+.employee-form .form-group:last-child,
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== ⚠️ Form Validation ===== */
+.employee-form .form-control.is-invalid,
+.form-control.is-invalid,
+.employee-form .form-select.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--danger);
+  background-image: none;
+}
+
+.employee-form .form-control.is-invalid:focus,
+.form-control.is-invalid:focus,
+.employee-form .form-select.is-invalid:focus,
+.form-select.is-invalid:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.employee-form .form-control.is-valid,
+.form-control.is-valid,
+.employee-form .form-select.is-valid,
+.form-select.is-valid {
+  border-color: var(--secondary);
+  background-image: none;
+}
+
+.employee-form .form-control.is-valid:focus,
+.form-control.is-valid:focus,
+.employee-form .form-select.is-valid:focus,
+.form-select.is-valid:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.employee-form .invalid-feedback,
+.invalid-feedback {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.employee-form .valid-feedback,
+.valid-feedback {
+  color: var(--secondary);
+  font-size: 0.85rem;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== 📋 Form Text/Helper ===== */
+.employee-form .form-text,
+.form-text {
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== 📱 Responsive Form ===== */
+@media (max-width: 768px) {
+  .employee-form h2 {
+    font-size: 1.5rem;
+  }
+  
+  .employee-form .card-body,
+  .card-body {
+    padding: 20px;
+  }
+  
+  .employee-form .btn,
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .employee-form .form-control,
+  .form-control,
+  .employee-form .form-select,
+  .form-select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+@media (max-width: 576px) {
+  .employee-form h2 {
+    font-size: 1.3rem;
+  }
+  
+  .employee-form .card-body,
+  .card-body {
+    padding: 16px;
+  }
+  
+  .employee-form .status-badge,
+  .status-badge,
+  .employee-form .badge,
+  .badge {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+}
+
+/* ===== ✨ Additional Form Enhancements ===== */
+
+/* Checkbox & Radio */
+.employee-form .form-check-input,
+.form-check-input {
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #cbd5e1;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.employee-form .form-check-input:checked,
+.form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.employee-form .form-check-input:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: var(--primary);
+}
+
+.employee-form .form-check-label,
+.form-check-label {
+  margin-left: 8px;
+  cursor: pointer;
+  color: var(--dark-light);
+  font-weight: 500;
+}
+
+/* File Input */
+.employee-form .form-control[type="file"],
+.form-control[type="file"] {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.employee-form .form-control[type="file"]::file-selector-button,
+.form-control[type="file"]::file-selector-button {
+  padding: 8px 16px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  margin-right: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.employee-form .form-control[type="file"]::file-selector-button:hover,
+.form-control[type="file"]::file-selector-button:hover {
+  background: var(--primary-dark);
+}
+
+/* Input Groups */
+.employee-form .input-group,
+.input-group {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.employee-form .input-group .input-group-text,
+.input-group .input-group-text {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-right: none;
+  color: var(--gray);
+  padding: 11px 16px;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+  font-weight: 600;
+}
+
+.employee-form .input-group .form-control,
+.input-group .form-control {
+  border-left: none;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.employee-form .input-group .form-control:focus,
+.input-group .form-control:focus {
+  border-left: none;
+}
+
+/* Alert Messages */
+.employee-form .alert,
+.alert {
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 0.92rem;
+}
+
+.employee-form .alert i,
+.alert i {
+  font-size: 1.2rem;
+}
+
+.employee-form .alert-success,
+.alert-success {
+  background: #dcfce7;
+  color: #166534;
+  border-left: 4px solid #22c55e;
+}
+
+.employee-form .alert-danger,
+.alert-danger {
+  background: #fee2e2;
+  color: #991b1b;
+  border-left: 4px solid #ef4444;
+}
+
+.employee-form .alert-warning,
+.alert-warning {
+  background: #fef3c7;
+  color: #92400e;
+  border-left: 4px solid #f59e0b;
+}
+
+.employee-form .alert-info,
+.alert-info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
 }

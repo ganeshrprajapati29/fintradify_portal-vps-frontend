@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FaCog, FaSave, FaUser, FaEnvelope, FaLock } from "react-icons/fa";
+import {
+  FaCog,
+  FaSave,
+  FaUser,
+  FaEnvelope,
+  FaPhoneAlt,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
 const EmployeeSettings = () => {
   const [settings, setSettings] = useState({
@@ -9,14 +16,18 @@ const EmployeeSettings = () => {
     phone: "",
     address: "",
   });
+
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   const token = localStorage.getItem("token");
-  const API_URL = process.env.REACT_APP_API_URL?.trim() || "https://steelblue-sheep-699352.hostingersite.com";
+  const API_URL =
+    process.env.REACT_APP_API_URL?.trim() ||
+    "https://steelblue-sheep-699352.hostingersite.com";
 
   useEffect(() => {
     fetchSettings();
+    // eslint-disable-next-line
   }, []);
 
   const fetchSettings = async () => {
@@ -24,30 +35,54 @@ const EmployeeSettings = () => {
       const res = await axios.get(`${API_URL}/api/employee/settings`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.data.success) {
+
+      if (res.data?.success) {
         setSettings(res.data.settings);
       }
-    } catch (err) {
-      console.error("❌ Fetch settings error:", err);
+    } catch (error) {
+      console.error("❌ Fetch error:", error);
+      setMessage({
+        type: "danger",
+        text: "Failed to load settings. Please try again.",
+      });
     }
+  };
+
+  const handleChange = (e) => {
+    setSettings({ ...settings, [e.target.name]: e.target.value });
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
+    setMessage({});
+
     try {
-      const res = await axios.put(`${API_URL}/api/employee/settings`, settings, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.data.success) {
-        setMessage("Settings updated successfully!");
+      const res = await axios.put(
+        `${API_URL}/api/employee/settings`,
+        settings,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (res.data?.success) {
+        setMessage({
+          type: "success",
+          text: "Settings updated successfully ✔",
+        });
       } else {
-        setMessage(res.data.msg || "Failed to update settings.");
+        setMessage({
+          type: "danger",
+          text: res.data?.msg || "Update failed",
+        });
       }
-    } catch (err) {
-      console.error("❌ Save settings error:", err);
-      setMessage(err.response?.data?.msg || "Error updating settings.");
+    } catch (error) {
+      console.error("❌ Save error:", error);
+      setMessage({
+        type: "danger",
+        text: error.response?.data?.msg || "Server error occurred",
+      });
     } finally {
       setLoading(false);
     }
@@ -55,73 +90,117 @@ const EmployeeSettings = () => {
 
   return (
     <div className="container my-5">
-      <div className="card shadow-lg">
-        <div className="card-header bg-info text-white d-flex align-items-center">
-          <FaCog className="me-2" />
-          <h4 className="mb-0">Employee Settings</h4>
-        </div>
-        <div className="card-body">
-          {message && (
-            <div className={`alert ${message.includes("success") ? "alert-success" : "alert-danger"}`}>
-              {message}
-            </div>
-          )}
-          <form onSubmit={handleSave}>
-            <div className="row g-3">
-              <div className="col-md-6">
-                <label className="form-label">
-                  <FaUser className="me-1" /> Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={settings.name}
-                  onChange={(e) => setSettings({ ...settings, name: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">
-                  <FaEnvelope className="me-1" /> Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={settings.email}
-                  onChange={(e) => setSettings({ ...settings, email: e.target.value })}
-                  required
-                />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">
-                  <FaLock className="me-1" /> Phone
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={settings.phone}
-                  onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-                />
-              </div>
-              <div className="col-md-12">
-                <label className="form-label">
-                  <FaLock className="me-1" /> Address
-                </label>
-                <textarea
-                  className="form-control"
-                  value={settings.address}
-                  onChange={(e) => setSettings({ ...settings, address: e.target.value })}
-                  rows="3"
-                />
+      <div className="row justify-content-center">
+        <div className="col-lg-9 col-xl-8">
+          <div className="card border-0 shadow-lg rounded-4">
+            {/* HEADER */}
+            <div className="card-header bg-gradient bg-info text-white rounded-top-4 py-3">
+              <div className="d-flex align-items-center">
+                <FaCog size={22} className="me-2" />
+                <h5 className="mb-0 fw-semibold">Employee Settings</h5>
               </div>
             </div>
-            <div className="mt-4">
-              <button type="submit" className="btn btn-success" disabled={loading}>
-                <FaSave className="me-2" />
-                {loading ? "Saving..." : "Save Settings"}
-              </button>
+
+            {/* BODY */}
+            <div className="card-body p-4">
+              {message?.text && (
+                <div
+                  className={`alert alert-${message.type} alert-dismissible fade show`}
+                  role="alert"
+                >
+                  {message.text}
+                </div>
+              )}
+
+              <form onSubmit={handleSave}>
+                {/* PERSONAL INFO */}
+                <h6 className="fw-bold mb-3 text-secondary">
+                  Personal Information
+                </h6>
+
+                <div className="row g-4">
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">
+                      <FaUser className="me-2 text-info" />
+                      Full Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={settings.name}
+                      onChange={handleChange}
+                      className="form-control form-control-lg"
+                      placeholder="Enter your name"
+                      required
+                    />
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">
+                      <FaEnvelope className="me-2 text-info" />
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={settings.email}
+                      onChange={handleChange}
+                      className="form-control form-control-lg"
+                      placeholder="Enter email"
+                      required
+                    />
+                  </div>
+
+                  <div className="col-md-6">
+                    <label className="form-label fw-semibold">
+                      <FaPhoneAlt className="me-2 text-info" />
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      name="phone"
+                      value={settings.phone}
+                      onChange={handleChange}
+                      className="form-control form-control-lg"
+                      placeholder="Enter phone number"
+                    />
+                  </div>
+
+                  <div className="col-md-12">
+                    <label className="form-label fw-semibold">
+                      <FaMapMarkerAlt className="me-2 text-info" />
+                      Address
+                    </label>
+                    <textarea
+                      name="address"
+                      value={settings.address}
+                      onChange={handleChange}
+                      className="form-control"
+                      rows="3"
+                      placeholder="Enter full address"
+                    ></textarea>
+                  </div>
+                </div>
+
+                {/* ACTION */}
+                <div className="mt-5 d-flex justify-content-end">
+                  <button
+                    type="submit"
+                    className="btn btn-success btn-lg px-4"
+                    disabled={loading}
+                  >
+                    <FaSave className="me-2" />
+                    {loading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
+
+          {/* FOOT NOTE */}
+          <p className="text-center text-muted mt-3 small">
+            Keep your profile updated for better communication.
+          </p>
         </div>
       </div>
     </div>

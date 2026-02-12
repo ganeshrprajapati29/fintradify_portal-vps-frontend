@@ -15,6 +15,7 @@ import SalarySlipPage from './pages/SalarySlipPage';
 import AdminTaskPage from './pages/AdminTaskPage';
 import EmployeeTaskPage from './pages/EmployeeTaskPage';
 import EmployeeForm from './pages/EmployeeForm';
+import PunchInOutPage from './pages/PunchInOutPage';
 import AdminMessages from './pages/AdminMessages';
 import AttendanceLeaveDashboard from './pages/AttendanceLeaveDashboard';
 import AboutPage from './pages/AboutPage';
@@ -24,6 +25,7 @@ import EmployeeAttendanceLeaveDashboard from './pages/EmployeeAttendanceLeaveDas
 import HRPortalPolicies from './pages/HrPortalPolicies';
 import SuperAdminSettings from './pages/SuperAdminSettings';
 import EmployeeSettings from './pages/EmployeeSettings';
+import EmployeeNotifications from './pages/EmployeeNotifications';
 import AdminSettings from './pages/AdminSettings';
 import SuperAdminEmployees from './pages/SuperAdminEmployees';
 import SuperAdminTasks from './pages/SuperAdminTasks';
@@ -42,6 +44,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import FeaturesPage from './pages/FeaturesPage';
 import SolutionsPage from './pages/SolutionsPage';
+
 
 function AppContent() {
   const [role, setRole] = useState(null);
@@ -204,15 +207,7 @@ function AppContent() {
         } 
       />
 
-      {/* Employee Routes */}
-      <Route 
-        path="/employee/profile" 
-        element={
-          <ProtectedRoute allowedRoles="employee">
-            <EmployeeProfile />
-          </ProtectedRoute>
-        } 
-      />
+
       <Route 
         path="/employee/task" 
         element={
@@ -221,21 +216,37 @@ function AppContent() {
           </ProtectedRoute>
         } 
       />
-      <Route 
-        path="/employee/form" 
+      <Route
+        path="/employee/form"
         element={
           <ProtectedRoute allowedRoles="employee">
             <EmployeeForm />
           </ProtectedRoute>
-        } 
+        }
       />
-      <Route 
-        path="/employee/settings" 
+      <Route
+        path="/employee/punch-in-out"
+        element={
+          <ProtectedRoute allowedRoles="employee">
+            <PunchInOutPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employee/settings"
         element={
           <ProtectedRoute allowedRoles="employee">
             <EmployeeSettings />
           </ProtectedRoute>
-        } 
+        }
+      />
+      <Route
+        path="/employee/profile"
+        element={
+          <ProtectedRoute allowedRoles="employee">
+            <EmployeeProfile />
+          </ProtectedRoute>
+        }
       />
 
       {/* Shared Routes (for multiple roles) */}

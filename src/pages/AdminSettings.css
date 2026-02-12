@@ -1,0 +1,92 @@
+.admin-settings {
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+.admin-settings .card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-settings h2 {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.admin-settings h5 {
+  color: #374151;
+  font-weight: 600;
+}
+
+.admin-settings .form-label {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.admin-settings .form-control,
+.admin-settings .form-select {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.admin-settings .form-control:focus,
+.admin-settings .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.admin-settings .btn {
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.admin-settings .btn-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border: none;
+}
+
+.admin-settings .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.admin-settings .btn-primary:disabled {
+  opacity: 0.7;
+  transform: none;
+}
+
+.admin-settings .form-check-input:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.admin-settings .form-check-label {
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.admin-settings hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+}
+
+@media (max-width: 768px) {
+  .admin-settings .container {
+    padding: 0 15px;
+  }
+
+  .admin-settings .card {
+    padding: 20px;
+  }
+
+  .admin-settings .row.g-3 {
+    --bs-gutter-x: 1rem;
+  }
+}

@@ -1,43 +1,97 @@
-.employee-task-page {
-  width: 100%;
+.task-page {
+  background: #f6f8fb;
   min-height: 100vh;
-  background: #f8f9fa;
 }
 
-.employee-task-page h2 {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
+.task-header h2 {
+  font-weight: 700;
+  color: #0d6efd;
+  margin-bottom: 4px;
 }
 
-.employee-task-page .card {
-  /* border-radius: 12px; */
+.task-header p {
+  color: #6c757d;
+  margin: 0;
+  font-size: 14px;
+}
+
+.task-card {
+  border-radius: 14px;
   overflow: hidden;
 }
 
-.employee-task-page table {
-  width: 100%;
-  font-size: 0.95rem;
+/* Table */
+.task-table thead {
+  background: #f1f4f9;
 }
 
-.employee-task-page thead th {
-  white-space: nowrap;
-  font-size: 0.9rem;
+.task-table th {
+  font-size: 13px;
   font-weight: 600;
-  background: #0f3460; /* ✅ Light header background */
-  color: #fcfdfd; /* ✅ Dark text */
+  text-transform: uppercase;
+  color: #495057;
+  padding: 14px;
 }
 
-.employee-task-page tbody td {
-  vertical-align: middle;
+.task-table td {
+  padding: 14px;
+  font-size: 14px;
 }
 
-.employee-task-page .badge {
-  font-size: 0.8rem;
+/* Status dropdown */
+.status-select {
+  min-width: 140px;
+}
+
+/* Badges */
+.badge {
   padding: 6px 10px;
-  border-radius: 8px;
+  font-size: 12px;
+  border-radius: 20px;
 }
 
-.employee-task-page .form-select {
-  border-radius: 6px;
-  font-size: 0.85rem;
+.badge-high {
+  background: #dc3545;
+  color: #fff;
+}
+
+.badge-medium {
+  background: #ffc107;
+  color: #000;
+}
+
+.badge-low {
+  background: #adb5bd;
+  color: #fff;
+}
+
+.badge-done {
+  background: #198754;
+  color: #fff;
+}
+
+.badge-progress {
+  background: #0dcaf0;
+  color: #000;
+}
+
+.badge-pending {
+  background: #6c757d;
+  color: #fff;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state h6 {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #6c757d;
 }

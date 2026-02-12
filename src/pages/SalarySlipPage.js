@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -9,6 +9,7 @@ export default function SalarySlipPage() {
   const [search, setSearch] = useState("");
   const [employees, setEmployees] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [settings, setSettings] = useState({});
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -18,6 +19,24 @@ export default function SalarySlipPage() {
   const token = localStorage.getItem("token");
   const API_URL =
     process.env.REACT_APP_API_URL?.trim() || "https://steelblue-sheep-699352.hostingersite.com";
+
+  // Fetch admin settings on component mount
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/admin/settings`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.data.success) {
+        setSettings(res.data.settings);
+      }
+    } catch (err) {
+      console.error("❌ Fetch Settings Error:", err);
+    }
+  };
 
   // 🔍 Search employees
   const handleSearch = async () => {

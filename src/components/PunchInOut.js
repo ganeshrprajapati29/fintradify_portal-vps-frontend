@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import "./PunchInOut.css";
 
 const PunchInOut = () => {
@@ -12,6 +10,9 @@ const PunchInOut = () => {
   const [attendance, setAttendance] = useState([]);
   const [todayRecord, setTodayRecord] = useState(null);
   const [isPunching, setIsPunching] = useState(false);
+  const [locationStatus, setLocationStatus] = useState("idle"); // idle, getting, success, error
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [notification, setNotification] = useState({ show: false, type: "", message: "" });
 
   // ✅ Always ensure data is an array
   const ensureArray = (data) =>
@@ -104,16 +105,30 @@ const PunchInOut = () => {
     return () => clearTimeout(timer);
   }, [attendance]);
 
-  // ✅ Punch In
+  // ✅ Punch In with enhanced UX
   const handlePunchIn = async () => {
-    if (status === "punchedIn")
-      return alert("⚠️ Already punched in today!");
-    if (status === "punchedOut")
-      return alert("✅ You've already completed today's attendance.");
+    if (status === "punchedIn") {
+      setNotification({ show: true, type: "warning", message: "⚠️ Already punched in today!" });
+      setTimeout(() => setNotification({ show: false, type: "", message: "" }), 3000);
+      return;
+    }
+    if (status === "punchedOut") {
+      setNotification({ show: true, type: "info", message: "✅ You've already completed today's attendance." });
+      setTimeout(() => setNotification({ show: false, type: "", message: "" }), 3000);
+      return;
+    }
 
     setIsPunching(true);
+    setNotification({ show: true, type: "info", message: "🔄 Getting location and punching in..." });
+
     try {
+      setLocationStatus("getting");
       const loc = await getLocation();
+      setLocationStatus("success");
+      setCurrentLocation(loc);
+
+      setNotification({ show: true, type: "info", message: "🔄 Processing punch in..." });
+
       const res = await axios.post(
         `${API_URL}/api/employee/punch-in`,
         { latitude: loc.latitude, longitude: loc.longitude },
@@ -129,21 +144,30 @@ const PunchInOut = () => {
       setTodayRecord(todayRec || null);
 
       setStatus("punchedIn");
-      alert("✅ Punched In successfully!");
+      setNotification({ show: true, type: "success", message: "✅ Punched In successfully! Location recorded." });
+      setTimeout(() => setNotification({ show: false, type: "", message: "" }), 3000);
     } catch (err) {
       console.error("Punch In Error:", err.message);
-      alert(err.response?.data?.msg || "Punch In failed.");
+      setLocationStatus("error");
+      setNotification({ show: true, type: "error", message: err.response?.data?.msg || "Punch In failed. Please try again." });
+      setTimeout(() => setNotification({ show: false, type: "", message: "" }), 5000);
     } finally {
       setIsPunching(false);
+      setLocationStatus("idle");
     }
   };
 
-  // ✅ Punch Out
+  // ✅ Punch Out with enhanced UX
   const handlePunchOut = async () => {
-    if (status !== "punchedIn" || isPunching)
-      return alert("⚠️ Please punch in first before punching out.");
+    if (status !== "punchedIn" || isPunching) {
+      setNotification({ show: true, type: "warning", message: "⚠️ Please punch in first before punching out." });
+      setTimeout(() => setNotification({ show: false, type: "", message: "" }), 3000);
+      return;
+    }
 
     setIsPunching(true);
+    setNotification({ show: true, type: "info", message: "🔄 Punching out..." });
+
     try {
       const loc = await getLocation();
       const res = await axios.post(
@@ -161,10 +185,12 @@ const PunchInOut = () => {
       setTodayRecord(todayRec || null);
 
       setStatus("punchedOut");
-      alert("✅ Punched Out successfully!");
+      setNotification({ show: true, type: "success", message: "✅ Punched Out successfully!" });
+      setTimeout(() => setNotification({ show: false, type: "", message: "" }), 3000);
     } catch (err) {
       console.error("Punch Out Error:", err.message);
-      alert(err.response?.data?.msg || "Punch Out failed.");
+      setNotification({ show: true, type: "error", message: err.response?.data?.msg || "Punch Out failed." });
+      setTimeout(() => setNotification({ show: false, type: "", message: "" }), 5000);
     } finally {
       setIsPunching(false);
     }
@@ -188,21 +214,59 @@ const PunchInOut = () => {
 
   return (
     <div className="punch-container my-4 text-center">
+      {/* Notification */}
+      {notification.show && (
+        <div className={`alert alert-${notification.type === 'success' ? 'success' : notification.type === 'error' ? 'danger' : notification.type === 'warning' ? 'warning' : 'info'} alert-dismissible fade show mb-3`} role="alert">
+          {notification.message}
+          <button type="button" className="btn-close" onClick={() => setNotification({ show: false, type: "", message: "" })}></button>
+        </div>
+      )}
+
+      {/* Status Card */}
+      <div className="card mb-4 shadow-sm">
+        <div className="card-body">
+          <h5 className="card-title">Today's Attendance Status</h5>
+          <div className={`badge fs-6 ${status === 'punchedIn' ? 'bg-success' : status === 'punchedOut' ? 'bg-info' : 'bg-secondary'}`}>
+            {status === 'punchedIn' ? '🟢 Punched In' : status === 'punchedOut' ? '🔵 Completed' : '⚪ Not Started'}
+          </div>
+        </div>
+      </div>
+
       {/* ✅ Buttons */}
       <div className="button-group mb-4">
         <button
-          className="btn btn-success me-3"
+          className="btn btn-success btn-lg me-3 shadow"
           onClick={handlePunchIn}
           disabled={isPunching || status === "punchedIn" || status === "punchedOut"}
         >
-          {isPunching ? "Punching In..." : "Punch In"}
+          {isPunching ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+              Punching In...
+            </>
+          ) : (
+            <>
+              <i className="fas fa-sign-in-alt me-2"></i>
+              Punch In
+            </>
+          )}
         </button>
         <button
-          className="btn btn-danger"
+          className="btn btn-danger btn-lg shadow"
           onClick={handlePunchOut}
           disabled={isPunching || status !== "punchedIn"}
         >
-          {isPunching ? "Punching Out..." : "Punch Out"}
+          {isPunching ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+              Punching Out...
+            </>
+          ) : (
+            <>
+              <i className="fas fa-sign-out-alt me-2"></i>
+              Punch Out
+            </>
+          )}
         </button>
       </div>
 
@@ -222,15 +286,7 @@ const PunchInOut = () => {
         </div>
       )}
 
-      {/* ✅ Calendar */}
-      <div className="calendar-card shadow-lg p-4 rounded-4">
-        <h5 className="fw-bold text-primary mb-3">Attendance Calendar</h5>
-        <Calendar value={new Date()} tileClassName={tileClassName} />
-        <div className="legend mt-3">
-          <span className="badge bg-success me-2">Present</span>
-          <span className="badge bg-danger me-2">Absent</span>
-        </div>
-      </div>
+
     </div>
   );
 };

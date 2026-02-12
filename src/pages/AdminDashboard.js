@@ -19,7 +19,8 @@ import {
   FaTrash,
   FaCheck,
   FaTimesCircle,
-  FaArrowLeft
+  FaArrowLeft,
+  FaBell
 } from "react-icons/fa";
 
 // ✅ Import child components
@@ -29,6 +30,8 @@ import SalarySlipPage from "./SalarySlipPage";
 import AdminTaskPage from "./AdminTaskPage";
 import AdminMessages from "./AdminMessages";
 import AttendanceLeaveDashboard from "./AttendanceLeaveDashboard";
+import AdminSettings from "./AdminSettings";
+import SendNotification from "./SendNotification";
 
 const AdminDashboard = () => {
   const [employees, setEmployees] = useState([]);
@@ -948,8 +951,8 @@ const AdminDashboard = () => {
               </a>
             </li>
             <li>
-              <a 
-                href="#salary-slip" 
+              <a
+                href="#salary-slip"
                 className={activeTab === "salary-slip" ? "active" : ""}
                 onClick={(e) => {
                   e.preventDefault();
@@ -961,8 +964,21 @@ const AdminDashboard = () => {
               </a>
             </li>
             <li>
-              <a 
-                href="#tasks" 
+              <a
+                href="#settings"
+                className={activeTab === "settings" ? "active" : ""}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveTab("settings");
+                  setSidebarOpen(false);
+                }}
+              >
+                <FaTachometerAlt className="icon" /> Settings
+              </a>
+            </li>
+            <li>
+              <a
+                href="#tasks"
                 className={activeTab === "tasks" ? "active" : ""}
                 onClick={(e) => {
                   e.preventDefault();
@@ -974,8 +990,8 @@ const AdminDashboard = () => {
               </a>
             </li>
             <li>
-              <a 
-                href="#messages" 
+              <a
+                href="#messages"
                 className={activeTab === "messages" ? "active" : ""}
                 onClick={(e) => {
                   e.preventDefault();
@@ -984,6 +1000,19 @@ const AdminDashboard = () => {
                 }}
               >
                 <FaEnvelope className="icon" /> Emp Messages
+              </a>
+            </li>
+            <li>
+              <a
+                href="#notifications"
+                className={activeTab === "notifications" ? "active" : ""}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveTab("notifications");
+                  setSidebarOpen(false);
+                }}
+              >
+                <FaBell className="icon" /> Send Notifications
               </a>
             </li>
           </ul>
@@ -1256,8 +1285,10 @@ const AdminDashboard = () => {
           {activeTab === "create-employee" && <CreateEmployee />}
           {activeTab === "attendance" && <EmployeeAttendance />}
           {activeTab === "salary-slip" && <SalarySlipPage />}
+          {activeTab === "settings" && <AdminSettings />}
           {activeTab === "tasks" && <AdminTaskPage />}
           {activeTab === "messages" && <AdminMessages />}
+          {activeTab === "notifications" && <SendNotification />}
           
           {activeTab === "leaves" && (
             <div className="table-container">
